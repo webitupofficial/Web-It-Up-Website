@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Custom navigation logic for locomotive (desktop)
-  document.querySelectorAll('.nav-links a[data-scroll-to], .hero-btn-wrapper a[data-scroll-to], .pricing-card a[data-scroll-to], .cta-box a[data-scroll-to], .footer-links a[data-scroll-to]').forEach(link => {
+  document.querySelectorAll('.nav-links a[data-scroll-to], .hero-btn-wrapper a[data-scroll-to], .cta-box a[data-scroll-to], .footer-links a[data-scroll-to]').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetAttr = link.getAttribute('href');
@@ -188,11 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollTrigger: { trigger: ".case-studies", scroller: scrollContainer, start: "top 75%" },
       y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
     });
-    
-    gsap.from(".pricing-card", {
-      scrollTrigger: { trigger: ".pricing", scroller: scrollContainer, start: "top 75%" },
-      y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
-    });
 
     gsap.from(".card", {
       scrollTrigger: { trigger: ".cards-container", scroller: scrollContainer, start: "top 80%" },
@@ -200,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     gsap.from(".portfolio-card", {
-      scrollTrigger: { trigger: ".portfolio-carousel", scroller: scrollContainer, start: "top 80%" },
-      x: 50, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out"
+      scrollTrigger: { trigger: ".portfolio-grid-wrapper", scroller: scrollContainer, start: "top 80%" },
+      y: 50, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out"
     });
 
     gsap.from(".footer-heading, .contact-details, .contact-form-wrapper, .footer-bottom", {
@@ -224,9 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.from(".process-step", { scrollTrigger: { trigger: ".process", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".feature-item", { scrollTrigger: { trigger: ".why-us", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".case-card", { scrollTrigger: { trigger: ".case-studies", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
-    gsap.from(".pricing-card", { scrollTrigger: { trigger: ".pricing", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".card", { scrollTrigger: { trigger: ".cards-container", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
-    gsap.from(".portfolio-card", { scrollTrigger: { trigger: ".portfolio-carousel", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
+    gsap.from(".portfolio-card", { scrollTrigger: { trigger: ".portfolio-grid-wrapper", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".contact-section, .footer-bottom", { scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 90%" }, ...standardFadeUp });
   });
 
