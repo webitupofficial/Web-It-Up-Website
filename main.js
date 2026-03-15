@@ -68,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Phase 7: Canvas Golden Trail & Custom Pointer ---
-  const customPointer = document.querySelector('.custom-pointer');
+  // --- Phase 8: Hardware Pointer & Physics Trail ---
   const cursorCanvas = document.getElementById('cursor-canvas');
   
-  if(customPointer && cursorCanvas) {
+  if(cursorCanvas) {
     const ctx = cursorCanvas.getContext('2d');
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -86,10 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
       cursorCanvas.height = height;
     });
 
-    let mouseX = width / 2;
-    let mouseY = height / 2;
-    // Unbreakable Native Tracking
-    customPointer.style.transform = 'translate(-50%, -50%)';
+    let targetX = width / 2;
+    let targetY = height / 2;
+    let currentX = width / 2;
+    let currentY = height / 2;
 
     // History array for trail
     const pointerHistory = [];
@@ -99,16 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let sparkles = [];
 
     window.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      customPointer.style.left = mouseX + 'px';
-      customPointer.style.top = mouseY + 'px';
-      
-      // Push history for trail
-      pointerHistory.push({ x: mouseX, y: mouseY });
-      if(pointerHistory.length > maxHistory) {
-        pointerHistory.shift();
-      }
+      targetX = e.clientX;
+      targetY = e.clientY;
     }, { capture: true, passive: true });
 
     // Mousedown Sparkle Burst (Capture phase to guarantee firing)
@@ -127,15 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { capture: true, passive: true });
 
-    // Hover states for magnetic buttons and links
-    document.querySelectorAll('a, button, .magnetic-link, .magnetic-btn, .portfolio-card').forEach(el => {
-      el.addEventListener('mouseenter', () => customPointer.classList.add('hovered'));
-      el.addEventListener('mouseleave', () => customPointer.classList.remove('hovered'));
-    });
-
     // Trail & Sparkle Render Loop
     function renderCursorEffects() {
       ctx.clearRect(0, 0, width, height);
+
+      // Physics Interpolation for 0-lag smooth trailing
+      currentX += (targetX - currentX) * 0.3;
+      currentY += (targetY - currentY) * 0.3;
+
+      // Push history EVERY FRAME for pure golden fluid behavior (vanishes on stop)
+      pointerHistory.push({ x: currentX, y: currentY });
+      if(pointerHistory.length > maxHistory) {
+        pointerHistory.shift();
+      }
 
       // 1. Draw Golden Trail
       if (pointerHistory.length > 1) {
