@@ -76,7 +76,8 @@ html.has-scroll-dragging {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor: none !important;
+  /* Hardware Zero-Latency Cursor Injection */
+  cursor: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.5 10.5L23 12L14.5 13.5L12 22L9.5 13.5L1 12L9.5 10.5L12 2Z" fill="%23c77dff" stroke="white" stroke-width="1"/></svg>') 12 12, auto !important;
 }
 
 body {
@@ -92,7 +93,7 @@ h1, h2, h3, h4, .logo {
   font-family: var(--font-heading);
 }
 
-/* Custom Pointer & Canvas Trail */
+/* Canvas Trail Setup */
 #cursor-canvas {
   position: fixed;
   top: 0;
@@ -103,30 +104,9 @@ h1, h2, h3, h4, .logo {
   z-index: 9998;
 }
 
-.custom-pointer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  /* GSAP handles xPercent/yPercent; NO native transform offset! */
-}
-
-/* Hover rotation state assigned via JS class */
-.custom-pointer.hovered svg {
-  animation: pointerSpin 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-  transform-origin: center;
-  fill: #fff;
-}
-
-@keyframes pointerSpin {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.4) rotate(90deg); }
-  100% { transform: scale(1) rotate(180deg); }
-}
-
-a, button, .magnetic-link {
-  cursor: none;
+/* Hardware Interactive Hover Cursor */
+a, button, .magnetic-link, .magnetic-btn, .portfolio-card {
+  cursor: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" width="40" height="40" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14.5 10.5L23 12L14.5 13.5L12 22L9.5 13.5L1 12L9.5 10.5L12 2Z" fill="white"/></svg>') 20 20, pointer !important;
 }
 
 /* Typography Utility Classes */
