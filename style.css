@@ -191,16 +191,10 @@ h1, h2, h3, h4, .logo {
 
 .reveal-text {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(40px);
+  opacity: 1; /* Was 0, hiding it if GSAP didn't trigger perfectly */
 }
 
-.gradient-text {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+/* We'll rely entirely on GSAP 'from' to hide it initially instead of 'to' hiding it via CSS */
 
 .hero-subtitle {
   font-size: clamp(1.1rem, 2vw, 1.5rem);
@@ -262,6 +256,49 @@ section {
 .about-text strong {
   color: white;
   font-weight: 500;
+}
+
+/* Shimmer Animation for text */
+.shimmer-text {
+  background: linear-gradient(-45deg, var(--text-muted) 30%, #ffffff 50%, var(--text-muted) 70%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -150% 50%; }
+}
+
+/* Doodles CSS */
+.doodle-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.doodle {
+  position: absolute;
+  opacity: 0.2;
+}
+
+.doodle-1 { top: 15%; left: 10%; width: 150px; animation: floatRotate 10s ease-in-out infinite; }
+.doodle-2 { top: 60%; right: 10%; width: 120px; animation: floatRotate 12s ease-in-out infinite reverse; }
+.doodle-3 { top: 80%; left: 20%; width: 80px; animation: floatRotate 8s ease-in-out infinite; }
+
+@keyframes floatRotate {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(30px, -50px) rotate(10deg); }
+  66% { transform: translate(-20px, 40px) rotate(-15deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 /* Services Section */
