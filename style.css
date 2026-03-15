@@ -103,7 +103,7 @@ h1, h2, h3, h4, .logo {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
+  /* transform removed to allow GSAP xPercent/yPercent positioning */
   transition: width 0.3s, height 0.3s, background-color 0.3s;
 }
 
@@ -117,7 +117,7 @@ h1, h2, h3, h4, .logo {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%);
+  /* transform removed to allow GSAP xPercent/yPercent positioning */
   transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
 }
 
@@ -147,18 +147,21 @@ a, button {
 .bold { font-weight: 800; }
 .accent { color: var(--accent-secondary); }
 
-/* Navbar */
+/* Navbar (Glassmorphism) */
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1.5rem 5%;
+  padding: 1.2rem 5%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
-  mix-blend-mode: difference;
+  background: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .logo {
@@ -678,37 +681,41 @@ section {
   background: var(--accent-secondary);
 }
 
-/* Footer Giant Text */
-.footer-giant-text-container {
-  width: 100%;
-  overflow: hidden;
-  text-align: center;
-  padding: 8rem 0 2rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+/* Floating WhatsApp */
+.floating-wa {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 60px;
+  height: 60px;
+  background-color: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+  transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+.floating-wa:hover {
+  background-color: #1eb956;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
 }
 
-.footer-giant-text {
-  font-size: clamp(5rem, 15vw, 18rem);
-  font-family: var(--font-heading);
-  font-weight: 800;
-  line-height: 0.8;
-  letter-spacing: -2px;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.1);
-  background: var(--gradient);
-  background-clip: text;
-  -webkit-background-clip: text;
-  transition: -webkit-text-stroke 0.3s;
-}
-.footer-giant-text:hover {
-  -webkit-text-stroke: 1px rgba(255,255,255,0.8);
-  color: rgba(255,255,255,0.05);
+/* Footer Container Setup */
+.footer {
+  background: #000;
+  color: white;
+  position: relative;
+  border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .footer-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4rem 5% 0;
+  padding: 5rem 5% 0;
 }
 
 /* Media Queries for Mobile Experience */
