@@ -78,28 +78,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let followerX = mouseX;
     let followerY = mouseY;
     
-    // Fix offset: Center cursors natively before tracking
-    gsap.set([cursor, cursorFollower], { xPercent: -50, yPercent: -50 });
+    // QuickTo mapping directly to left/top to avoid CSS transform matrix conflicts
+    const xSet = gsap.quickTo(cursor, "left", { duration: 0, ease: "none" });
+    const ySet = gsap.quickTo(cursor, "top", { duration: 0, ease: "none" });
+    const fxSet = gsap.quickTo(cursorFollower, "left", { duration: 0.15, ease: "power3.out" });
+    const fySet = gsap.quickTo(cursorFollower, "top", { duration: 0.15, ease: "power3.out" });
     
-    // QuickTo for high performance
-    const xSet = gsap.quickSetter(cursor, "x", "px");
-    const ySet = gsap.quickSetter(cursor, "y", "px");
-    const fxSet = gsap.quickSetter(cursorFollower, "x", "px");
-    const fySet = gsap.quickSetter(cursorFollower, "y", "px");
+    // Initial Setting
+    xSet(mouseX);
+    ySet(mouseY);
+    fxSet(mouseX);
+    fySet(mouseY);
     
     window.addEventListener("mousemove", e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
       xSet(mouseX);
       ySet(mouseY);
-    });
-    
-    // Follower animation loop
-    gsap.ticker.add(() => {
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
-      fxSet(followerX);
-      fySet(followerY);
+      fxSet(mouseX);
+      fySet(mouseY);
     });
     
     // Hover effects
