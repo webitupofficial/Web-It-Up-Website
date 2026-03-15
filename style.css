@@ -103,7 +103,7 @@ h1, h2, h3, h4, .logo {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  /* transform removed to allow GSAP xPercent/yPercent positioning */
+  transform: translate(-50%, -50%);
   transition: width 0.3s, height 0.3s, background-color 0.3s;
 }
 
@@ -117,7 +117,7 @@ h1, h2, h3, h4, .logo {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
-  /* transform removed to allow GSAP xPercent/yPercent positioning */
+  transform: translate(-50%, -50%);
   transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
 }
 
@@ -189,6 +189,35 @@ a, button {
 
 .nav-links a:hover {
   opacity: 0.7;
+}
+
+/* Global Background Doodles */
+.global-doodles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gdoodle {
+  position: absolute;
+  opacity: 0.15;
+}
+
+.gdoodle-1 { top: 10%; left: 5%; width: 200px; animation: floatRotate 15s ease-in-out infinite; }
+.gdoodle-2 { top: 50%; right: 5%; width: 250px; animation: floatRotate 20s ease-in-out infinite reverse; }
+.gdoodle-3 { bottom: 10%; left: 15%; width: 150px; animation: floatRotate 18s ease-in-out infinite; }
+.gdoodle-4 { top: 70%; right: 25%; width: 100px; animation: floatRotate 12s ease-in-out infinite reverse; }
+
+@keyframes floatRotate {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(50px, -60px) rotate(15deg); }
+  66% { transform: translate(-30px, 50px) rotate(-10deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 /* Hero Section */
