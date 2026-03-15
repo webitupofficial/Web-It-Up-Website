@@ -76,6 +76,7 @@ html.has-scroll-dragging {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none;
 }
 
 body {
@@ -90,6 +91,61 @@ body {
 h1, h2, h3, h4, .logo {
   font-family: var(--font-heading);
 }
+
+/* Custom Cursor */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-secondary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(199, 125, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+}
+
+.cursor.hovered {
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+}
+
+.cursor-follower.hovered {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+}
+
+a, button {
+  cursor: none;
+}
+
+/* Typography Utility Classes */
+.font-syne { font-family: 'Syne', sans-serif; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-caveat { font-family: 'Caveat', cursive; font-size: 1.1em; }
+.font-inter { font-family: 'Inter', sans-serif; }
+.italic { font-style: italic; }
+.bold { font-weight: 800; }
+.accent { color: var(--accent-secondary); }
 
 /* Navbar */
 .navbar {
@@ -134,59 +190,38 @@ h1, h2, h3, h4, .logo {
 
 /* Hero Section */
 .hero {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 5%;
   position: relative;
   overflow: hidden;
 }
 
-.hero::before {
-  content: '';
+#hero-canvas {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 70vw;
-  height: 70vw;
-  background: radial-gradient(circle, rgba(123, 44, 191, 0.15) 0%, rgba(5, 5, 5, 0) 60%);
-  transform: translate(-50%, -50%);
-  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.8;
   pointer-events: none;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 15%;
-  right: 15%;
-  width: 45vw;
-  height: 45vw;
-  background: radial-gradient(circle, rgba(199, 125, 255, 0.12) 0%, rgba(5, 5, 5, 0) 60%);
-  filter: blur(80px);
-  z-index: -1;
-  animation: floatOrb 8s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-40px, 60px) scale(1.1); }
 }
 
 .hero-content {
   text-align: center;
-  max-width: 900px;
+  z-index: 10;
+  padding: 0 5%;
+  max-width: 1200px;
+  mix-blend-mode: difference;
 }
 
 .hero-title {
-  font-size: clamp(4rem, 10vw, 8.5rem);
-  font-weight: 800;
-  line-height: 1;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 1.1;
   margin-bottom: 2rem;
-  letter-spacing: -3px;
-  text-transform: uppercase;
+  letter-spacing: -1px;
 }
 
 .reveal-text {
@@ -273,33 +308,7 @@ section {
   100% { background-position: -150% 50%; }
 }
 
-/* Doodles CSS */
-.doodle-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.doodle {
-  position: absolute;
-  opacity: 0.2;
-}
-
-.doodle-1 { top: 15%; left: 10%; width: 150px; animation: floatRotate 10s ease-in-out infinite; }
-.doodle-2 { top: 60%; right: 10%; width: 120px; animation: floatRotate 12s ease-in-out infinite reverse; }
-.doodle-3 { top: 80%; left: 20%; width: 80px; animation: floatRotate 8s ease-in-out infinite; }
-
-@keyframes floatRotate {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(30px, -50px) rotate(10deg); }
-  66% { transform: translate(-20px, 40px) rotate(-15deg); }
-  100% { transform: translate(0, 0) rotate(0deg); }
-}
+/* Doodles CSS Removed (Replaced by Hero Canvas and Awwwards Footer) */
 
 /* Services Section */
 .services {
@@ -667,6 +676,39 @@ section {
 
 .newsletter-form button:hover {
   background: var(--accent-secondary);
+}
+
+/* Footer Giant Text */
+.footer-giant-text-container {
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+  padding: 8rem 0 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.footer-giant-text {
+  font-size: clamp(5rem, 15vw, 18rem);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -2px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+  background: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  transition: -webkit-text-stroke 0.3s;
+}
+.footer-giant-text:hover {
+  -webkit-text-stroke: 1px rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.05);
+}
+
+.footer-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 5% 0;
 }
 
 /* Media Queries for Mobile Experience */
