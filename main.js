@@ -68,6 +68,127 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Awwwards Features: Cursor & Magnetic ---
+  const cursor = document.querySelector('.cursor');
+  const cursorFollower = document.querySelector('.cursor-follower');
+  
+  if(cursor && cursorFollower) {
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let followerX = mouseX;
+    let followerY = mouseY;
+    
+    // QuickTo for high performance
+    const xSet = gsap.quickSetter(cursor, "x", "px");
+    const ySet = gsap.quickSetter(cursor, "y", "px");
+    const fxSet = gsap.quickSetter(cursorFollower, "x", "px");
+    const fySet = gsap.quickSetter(cursorFollower, "y", "px");
+    
+    window.addEventListener("mousemove", e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      xSet(mouseX);
+      ySet(mouseY);
+    });
+    
+    // Follower animation loop
+    gsap.ticker.add(() => {
+      followerX += (mouseX - followerX) * 0.15;
+      followerY += (mouseY - followerY) * 0.15;
+      fxSet(followerX);
+      fySet(followerY);
+    });
+    
+    // Hover effects
+    document.querySelectorAll('a, button, .magnetic-link, .magnetic-btn, .portfolio-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('hovered');
+        cursorFollower.classList.add('hovered');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hovered');
+        cursorFollower.classList.remove('hovered');
+        gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+      });
+    });
+
+    // Magnetic logic
+    document.querySelectorAll('.magnetic-btn, .magnetic-link').forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const strength = el.dataset.strength || 30;
+        const dx = e.clientX - centerX;
+        const dy = e.clientY - centerY;
+        gsap.to(el, {
+          x: (dx / rect.width) * strength,
+          y: (dy / rect.height) * strength,
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      });
+    });
+  }
+
+  // --- Awwwards Features: Canvas Hero Background ---
+  const canvas = document.getElementById("hero-canvas");
+  if(canvas) {
+    const ctx = canvas.getContext("2d");
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    for(let i=0; i<80; i++) {
+        particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 2 + 1,
+            dx: (Math.random() - 0.5) * 0.5,
+            dy: (Math.random() - 0.5) * 0.5
+        });
+    }
+
+    function animateCanvas() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = "rgba(199, 125, 255, 0.5)";
+        particles.forEach(p => {
+            p.x += p.dx;
+            p.y += p.dy;
+            if(p.x < 0 || p.x > width) p.dx *= -1;
+            if(p.y < 0 || p.y > height) p.dy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        // Connect nearby particles for a constellation effect
+        ctx.strokeStyle = "rgba(199, 125, 255, 0.05)";
+        ctx.lineWidth = 1;
+        for(let i=0; i<particles.length; i++){
+            for(let j=i+1; j<particles.length; j++){
+                let dx = particles[i].x - particles[j].x;
+                let dy = particles[i].y - particles[j].y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        requestAnimationFrame(animateCanvas);
+    }
+    animateCanvas();
+  }
+
   // Custom navigation logic for locomotive (desktop)
   document.querySelectorAll('.nav-links a[data-scroll-to], .hero-btn-wrapper a[data-scroll-to], .cta-box a[data-scroll-to], .footer-links a[data-scroll-to]').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -198,6 +319,14 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 80%" },
       y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
     });
+
+    gsap.fromTo(".footer-giant-text", 
+      { scale: 0.8, opacity: 0, y: 100 }, 
+      { 
+        scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 95%", end: "bottom bottom", scrub: 1 }, 
+        scale: 1, opacity: 1, y: 0 
+      }
+    );
   });
 
   // Mobile Animations (Lightened)
