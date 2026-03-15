@@ -88,11 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let mouseX = width / 2;
     let mouseY = height / 2;
-    
-    // Unbreakable Center tracking with GSAP
-    gsap.set(customPointer, { xPercent: -50, yPercent: -50 });
-    const setPointerX = gsap.quickSetter(customPointer, "x", "px");
-    const setPointerY = gsap.quickSetter(customPointer, "y", "px");
+    // Unbreakable Native Tracking
+    customPointer.style.transform = 'translate(-50%, -50%)';
 
     // History array for trail
     const pointerHistory = [];
@@ -101,20 +98,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sparkle particles array
     let sparkles = [];
 
-    window.addEventListener("mousemove", e => {
+    window.addEventListener("mousemove", (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      setPointerX(mouseX);
-      setPointerY(mouseY);
+      customPointer.style.left = mouseX + 'px';
+      customPointer.style.top = mouseY + 'px';
       
       // Push history for trail
       pointerHistory.push({ x: mouseX, y: mouseY });
       if(pointerHistory.length > maxHistory) {
         pointerHistory.shift();
       }
-    });
+    }, { capture: true, passive: true });
 
-    // Mousedown Sparkle Burst
+    // Mousedown Sparkle Burst (Capture phase to guarantee firing)
     window.addEventListener("mousedown", (e) => {
       for(let i=0; i<15; i++) {
         const angle = Math.random() * Math.PI * 2;
@@ -128,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
           size: Math.random() * 3 + 1
         });
       }
-    });
+    }, { capture: true, passive: true });
 
     // Hover states for magnetic buttons and links
     document.querySelectorAll('a, button, .magnetic-link, .magnetic-btn, .portfolio-card').forEach(el => {
@@ -200,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
           duration: 0.5,
           ease: "power2.out"
         });
+      });
+      el.addEventListener('mouseleave', () => {
+        gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
       });
     });
   }
