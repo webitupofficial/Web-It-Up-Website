@@ -68,49 +68,122 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Awwwards Features: Cursor & Magnetic ---
-  const cursor = document.querySelector('.cursor');
-  const cursorFollower = document.querySelector('.cursor-follower');
+  // --- Phase 7: Canvas Golden Trail & Custom Pointer ---
+  const customPointer = document.querySelector('.custom-pointer');
+  const cursorCanvas = document.getElementById('cursor-canvas');
   
-  if(cursor && cursorFollower) {
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let followerX = mouseX;
-    let followerY = mouseY;
+  if(customPointer && cursorCanvas) {
+    const ctx = cursorCanvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    cursorCanvas.width = width;
+    cursorCanvas.height = height;
+
+    window.addEventListener("resize", () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      cursorCanvas.width = width;
+      cursorCanvas.height = height;
+    });
+
+    let mouseX = width / 2;
+    let mouseY = height / 2;
     
-    // QuickTo mapping directly to left/top to avoid CSS transform matrix conflicts
-    const xSet = gsap.quickTo(cursor, "left", { duration: 0, ease: "none" });
-    const ySet = gsap.quickTo(cursor, "top", { duration: 0, ease: "none" });
-    const fxSet = gsap.quickTo(cursorFollower, "left", { duration: 0.15, ease: "power3.out" });
-    const fySet = gsap.quickTo(cursorFollower, "top", { duration: 0.15, ease: "power3.out" });
-    
-    // Initial Setting
-    xSet(mouseX);
-    ySet(mouseY);
-    fxSet(mouseX);
-    fySet(mouseY);
-    
+    // Unbreakable Center tracking with GSAP
+    gsap.set(customPointer, { xPercent: -50, yPercent: -50 });
+    const setPointerX = gsap.quickSetter(customPointer, "x", "px");
+    const setPointerY = gsap.quickSetter(customPointer, "y", "px");
+
+    // History array for trail
+    const pointerHistory = [];
+    const maxHistory = 30; // Length of the trail
+
+    // Sparkle particles array
+    let sparkles = [];
+
     window.addEventListener("mousemove", e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      xSet(mouseX);
-      ySet(mouseY);
-      fxSet(mouseX);
-      fySet(mouseY);
+      setPointerX(mouseX);
+      setPointerY(mouseY);
+      
+      // Push history for trail
+      pointerHistory.push({ x: mouseX, y: mouseY });
+      if(pointerHistory.length > maxHistory) {
+        pointerHistory.shift();
+      }
     });
-    
-    // Hover effects
+
+    // Mousedown Sparkle Burst
+    window.addEventListener("mousedown", (e) => {
+      for(let i=0; i<15; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 5 + 2;
+        sparkles.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity,
+          life: 1, // 1.0 to 0.0
+          size: Math.random() * 3 + 1
+        });
+      }
+    });
+
+    // Hover states for magnetic buttons and links
     document.querySelectorAll('a, button, .magnetic-link, .magnetic-btn, .portfolio-card').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.classList.add('hovered');
-        cursorFollower.classList.add('hovered');
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hovered');
-        cursorFollower.classList.remove('hovered');
-        gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-      });
+      el.addEventListener('mouseenter', () => customPointer.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => customPointer.classList.remove('hovered'));
     });
+
+    // Trail & Sparkle Render Loop
+    function renderCursorEffects() {
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw Golden Trail
+      if (pointerHistory.length > 1) {
+        ctx.beginPath();
+        for(let i = 0; i < pointerHistory.length - 1; i++) {
+          const point = pointerHistory[i];
+          const nextPoint = pointerHistory[i + 1];
+          // Fade alpha based on position in history (older = more transparent)
+          const alpha = (i / pointerHistory.length) * 0.8;
+          
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(nextPoint.x, nextPoint.y);
+          
+          ctx.strokeStyle = `rgba(255, 215, 0, ${alpha})`; // Gold
+          ctx.lineWidth = (i / pointerHistory.length) * 4; // Taper line
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.stroke();
+        }
+      }
+
+      // 2. Animate and Draw Sparkles
+      for(let i = sparkles.length - 1; i >= 0; i--) {
+        const p = sparkles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.1; // gravity
+        p.vx *= 0.95; // friction
+        p.vy *= 0.95;
+        p.life -= 0.02; // fade out
+        
+        if(p.life <= 0) {
+          sparkles.splice(i, 1);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 215, 0, ${p.life})`;
+          ctx.fill();
+        }
+      }
+
+      requestAnimationFrame(renderCursorEffects);
+    }
+    renderCursorEffects();
 
     // Magnetic logic
     document.querySelectorAll('.magnetic-btn, .magnetic-link').forEach(el => {
