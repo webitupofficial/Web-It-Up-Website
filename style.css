@@ -92,49 +92,40 @@ h1, h2, h3, h4, .logo {
   font-family: var(--font-heading);
 }
 
-/* Custom Cursor */
-.cursor {
+/* Custom Pointer & Canvas Trail */
+#cursor-canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 8px;
-  height: 8px;
-  background-color: var(--accent-secondary);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, background-color 0.3s;
-}
-
-.cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(199, 125, 255, 0.4);
-  border-radius: 50%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
 }
 
-.cursor.hovered {
-  width: 15px;
-  height: 15px;
-  background-color: #fff;
+.custom-pointer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  /* GSAP handles xPercent/yPercent; NO native transform offset! */
 }
 
-.cursor-follower.hovered {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: transparent;
+/* Hover rotation state assigned via JS class */
+.custom-pointer.hovered svg {
+  animation: pointerSpin 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  transform-origin: center;
+  fill: #fff;
 }
 
-a, button {
+@keyframes pointerSpin {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.4) rotate(90deg); }
+  100% { transform: scale(1) rotate(180deg); }
+}
+
+a, button, .magnetic-link {
   cursor: none;
 }
 
