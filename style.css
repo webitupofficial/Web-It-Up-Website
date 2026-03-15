@@ -1,4 +1,5 @@
 /* Locomotive Scroll base styles */
+@import url('./new-sections.css');
 html.has-scroll-smooth {
   overflow: hidden; }
 html.has-scroll-dragging {
