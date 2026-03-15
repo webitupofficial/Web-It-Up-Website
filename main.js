@@ -181,12 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     gsap.from(".feature-item", {
       scrollTrigger: { trigger: ".why-us", scroller: scrollContainer, start: "top 75%" },
-      y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out"
-    });
-
-    gsap.from(".case-card", {
-      scrollTrigger: { trigger: ".case-studies", scroller: scrollContainer, start: "top 75%" },
-      y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
+      y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
     });
 
     gsap.from(".card", {
@@ -218,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.from(".about-text", { scrollTrigger: { trigger: ".about", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".process-step", { scrollTrigger: { trigger: ".process", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".feature-item", { scrollTrigger: { trigger: ".why-us", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
-    gsap.from(".case-card", { scrollTrigger: { trigger: ".case-studies", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".card", { scrollTrigger: { trigger: ".cards-container", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".portfolio-card", { scrollTrigger: { trigger: ".portfolio-grid-wrapper", scroller: scrollContainer, start: "top 85%" }, ...standardFadeUp });
     gsap.from(".contact-section, .footer-bottom", { scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 90%" }, ...standardFadeUp });
