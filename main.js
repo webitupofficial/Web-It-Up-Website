@@ -78,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let followerX = mouseX;
     let followerY = mouseY;
     
+    // Fix offset: Center cursors natively before tracking
+    gsap.set([cursor, cursorFollower], { xPercent: -50, yPercent: -50 });
+    
     // QuickTo for high performance
     const xSet = gsap.quickSetter(cursor, "x", "px");
     const ySet = gsap.quickSetter(cursor, "y", "px");
@@ -319,14 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 80%" },
       y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
     });
-
-    gsap.fromTo(".footer-giant-text", 
-      { scale: 0.8, opacity: 0, y: 100 }, 
-      { 
-        scrollTrigger: { trigger: ".footer", scroller: scrollContainer, start: "top 95%", end: "bottom bottom", scrub: 1 }, 
-        scale: 1, opacity: 1, y: 0 
-      }
-    );
   });
 
   // Mobile Animations (Lightened)
